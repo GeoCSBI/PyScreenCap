@@ -23,15 +23,36 @@ def getScreenshot(x1, y1, x2, y2):
 	image = np.array(image)
 	image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-	cv2.imshow('Test', image)
-	print('{} seconds'.format(time.time() - start_time))
-	cv2.waitKey()
-	cv2.destroyAllWindows()
-
+	# cv2.imshow('Test', image)
+	# print('{} seconds'.format(time.time() - start_time))
+	# cv2.waitKey()
+	# cv2.destroyAllWindows()
+	print type(image)
+	return image
 
 def VideoAssembler():
 
-	video = cv2.VideoCreator()
+	fourcc = cv2.VideoWriter_fourcc(*'XVID')
+	out = cv2.VideoWriter('output.avi',fourcc, 20.0, (1366,768))
+
+	while(True):
+	    
+		frame = getScreenshot(0, 0, 1366, 768)
+		# write the flipped frame
+		out.write(frame)
+
+		cv2.imshow('frame',frame)
+	    
+		if cv2.waitKey(1) & 0xFF == ord('q'):
+			break
+		else:
+			continue
+
+	# Release everything if job is finished
+	out.release()
+	cv2.destroyAllWindows()
+		
+
 
 if __name__ == '__main__':
-	getScreenshot(0, 0, 1366, 768)
+	VideoAssembler()
